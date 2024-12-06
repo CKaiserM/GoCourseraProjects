@@ -1,4 +1,4 @@
-/*
+/* 2024-12-06 - MCK
 Implement the dining philosopher’s problem with the following constraints/modifications.
 
 There should be 5 philosophers sharing chopsticks, with one chopstick between each adjacent pair of philosophers.
