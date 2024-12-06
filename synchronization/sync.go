@@ -23,26 +23,44 @@ package main
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
 var wait_gr sync.WaitGroup
-var mutex sync.Mutex
 
+// create channel with buffer of 2. "The host allows no more than 2 philosophers to eat concurrently."
+var host = make(chan bool, 2)
+
+//var mutex sync.Mutex
+
+// Each chopstick is a mutex
 type ChopS struct{ sync.Mutex }
 
+// Each philosopher is associated with a goroutine and two chopsticks + has an Id
 type Philo struct {
 	leftCS, rightCS *ChopS
+	pId             int
 }
 
 func (p Philo) eat() {
 	for i := 0; i < 3; i++ {
+		//In order to eat, a philosopher must get permission from a host which executes in its own goroutine.
+		host <- true
+
 		p.leftCS.Lock()
 		p.rightCS.Lock()
-
-		fmt.Println("eating")
-
+		time.Sleep(500 * time.Microsecond)
+		//When a philosopher starts eating (after it has obtained necessary locks) it prints “starting to eat <number>” on a line by itself, where <number> is the number of the philosopher.
+		fmt.Println("starting to eat", p.pId)
+		time.Sleep(1 * time.Second)
+		//When a philosopher finishes eating (before it has released its locks) it prints “finishing eating <number>” on a line by itself, where <number> is the number of the philosopher.
+		fmt.Println("finishing eating", p.pId)
+		time.Sleep(500 * time.Microsecond)
+		//fmt.Println()
 		p.rightCS.Unlock()
 		p.leftCS.Unlock()
+
+		<-host
 	}
 	wait_gr.Done()
 }
@@ -54,10 +72,12 @@ func main() {
 	}
 	philos := make([]*Philo, 5)
 	for i := 0; i < 5; i++ {
-		philos[i] = &Philo{CSticks[i], CSticks[(i+1)%5]}
+		//Each philosopher is numbered, 1 through 5.
+		philos[i] = &Philo{leftCS: CSticks[i], rightCS: CSticks[(i+1)%5], pId: i + 1}
 	}
 	for i := 0; i < 5; i++ {
 		wait_gr.Add(1)
+
 		go philos[i].eat()
 	}
 	wait_gr.Wait()
