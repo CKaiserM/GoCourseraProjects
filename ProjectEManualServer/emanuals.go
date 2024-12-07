@@ -18,7 +18,7 @@ func httpHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	pages, _ := scanDir("./manuals")
 	fmt.Println(pages)
-	t.Execute(w, nil)
+	t.Execute(w, pages)
 }
 
 func main() {
