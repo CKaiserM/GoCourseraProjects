@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"time"
 )
 
-func httpHandler(w http.ResponseWriter, r *http.Request) {
+func IndexHttpHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("received:", r.URL.Path)
 	//	fmt.Fprintf(w, "<h1>Welcome to Night Owl</h1>")
 	t, err := template.ParseFiles("templates/index.html")
@@ -21,8 +22,25 @@ func httpHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, pages)
 }
 
+func NewsHttpHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("received:", r.URL.Path)
+	//	fmt.Fprintf(w, "<h1>Welcome to Night Owl</h1>")
+	t, err := template.ParseFiles("templates/news.html")
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "%v Server error \n", http.StatusNotFound)
+		fmt.Fprintf(w, "Description: %s \n", err)
+		return
+	}
+	var date_now = time.Now().String()
+
+	//fmt.Println(date_now)
+	t.Execute(w, date_now)
+}
+
 func main() {
-	http.HandleFunc("/", httpHandler)
+	http.HandleFunc("/", IndexHttpHandler)
+	http.HandleFunc("/news", NewsHttpHandler)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
 	http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("images"))))
 	http.Handle("/manuals/", http.StripPrefix("/manuals/", http.FileServer(http.Dir("manuals"))))
