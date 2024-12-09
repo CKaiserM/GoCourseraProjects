@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Article Database</title>
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <form action="/search" method="post">
+        <h3 class="sm-heading">Search</h3>
+        <label for="keywords">Enter keywords (separated by space):</label>
+        <input type="text" id="keywords" name="keywords" required>
+        <button type="submit">Search by Keywords</button>
+    </form>
+    <br />
+    <form action="/add" method="post">
+        <h3 class="sm-heading">Add</h3>
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+        <label for="url">URL:</label>
+        <input type="text" id="url" name="url" required>
+        <label for="keywords">Keywords (separated by space):</label>
+        <input type="text" id="keywords" name="keywords" required>
+        <button type="submit">Add New Article</button>
+    </form>
+    <br />
+    <form action="/delete" method="post">
+        <h3 class="sm-heading">Delete</h3>
+        <label for="id">ID:</label>
+        <input type="text" id="id" name="id" required>
+        <button type="submit">Delete Article</button>
+    </form>
+</body>
+</html>
