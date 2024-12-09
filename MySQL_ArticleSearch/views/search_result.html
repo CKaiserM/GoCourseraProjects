@@ -1,0 +1,26 @@
+<!-- views/greeting.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Article Database</title>
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <h1>Search Result</h1>
+    <p>{{.message}}</p>
+    <hr />
+    {{range .articles}}
+        <div>
+            <h3>{{.Title}}</h3>
+            <p>Article ID: {{.Id}}</p>
+            <p><a href="{{.Url}}" target="_blank">{{.Url}}</a></p>
+            <p>Keywords: {{.Keywords}}</p>
+        </div>
+        <hr />
+    {{end}}
+    <button onclick="javascript:history.back()">OK</button>
+</body>
+</html>
